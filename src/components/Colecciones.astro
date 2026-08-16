@@ -1,0 +1,124 @@
+---
+const colecciones = [
+  {
+    id:          'romantica',
+    nombre:      'Romántica',
+    descripcion: 'Diseños suaves con flores acuarela, tonos blush y detalles dorados. Ideal para bodas íntimas y al aire libre.',
+    imagen:      '/images/col-romantica.jpg',
+    color:       'from-blush-100 to-cream-100',
+    tag:         'Más popular',
+  },
+  {
+    id:          'clasica',
+    nombre:      'Clásica',
+    descripcion: 'Elegancia atemporal con tipografía serif, bordes dorados y papelería de lujo en tonos crema e ivory.',
+    imagen:      '/images/col-clasica.jpg',
+    color:       'from-gold-50 to-cream-100',
+    tag:         'Atemporal',
+  },
+  {
+    id:          'botanica',
+    nombre:      'Botánica',
+    descripcion: 'Follaje verde esmeralda, flores prensadas y una paleta fresca y natural. Perfecta para bodas en jardín.',
+    imagen:      '/images/col-botanica.jpg',
+    color:       'from-green-50 to-cream-50',
+    tag:         'Tendencia',
+  },
+  {
+    id:          'moderna',
+    nombre:      'Moderna',
+    descripcion: 'Líneas limpias, tipografía contemporánea y un toque minimalista. Para parejas con estilo sofisticado.',
+    imagen:      '/images/col-moderna.jpg',
+    color:       'from-gray-100 to-cream-100',
+    tag:         'Minimalista',
+  },
+];
+---
+
+<section id="colecciones" class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <p class="col-tag font-sans text-xs tracking-[0.4em] uppercase text-gold-500 mb-3">Nuestras Líneas</p>
+      <h2 class="col-title section-title mb-4">Colecciones</h2>
+      <div class="divider-gold max-w-xs mx-auto">
+        <span class="font-script text-gold-400 text-xl">&#10022;</span>
+      </div>
+      <p class="col-desc font-sans text-sm font-light text-gray-500 max-w-xl mx-auto mt-4 leading-relaxed">
+        Cada colección cuenta una historia diferente. Elige la que mejor refleje la personalidad de su boda.
+      </p>
+    </div>
+
+    <!-- Grid de colecciones -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {colecciones.map((col, i) => (
+        <article
+          class={`col-card group relative overflow-hidden rounded-sm bg-gradient-to-br ${col.color} p-8 cursor-pointer border border-gold-100 hover:border-gold-300 transition-all duration-500 hover:shadow-xl`}
+          data-index={i}
+        >
+          <!-- Tag -->
+          <span class="absolute top-5 right-5 font-sans text-xs tracking-widest uppercase text-gold-500 bg-white/80 px-3 py-1 rounded-full">
+            {col.tag}
+          </span>
+
+          <!-- Ornamento decorativo -->
+          <div class="absolute -bottom-8 -right-8 w-40 h-40 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
+            <svg viewBox="0 0 100 100" fill="currentColor" class="text-gold-500">
+              <circle cx="50" cy="50" r="45"/>
+              <path d="M50,5 C50,5 70,30 95,50 C70,70 50,95 50,95 C50,95 30,70 5,50 C30,30 50,5 50,5z"/>
+            </svg>
+          </div>
+
+          <!-- Contenido -->
+          <div class="relative z-10">
+            <span class="font-sans text-xs tracking-[0.3em] uppercase text-gold-400 mb-3 block">
+              Colección
+            </span>
+            <h3 class="font-serif text-3xl text-gray-800 mb-3 group-hover:text-gold-700 transition-colors duration-300">
+              {col.nombre}
+            </h3>
+            <p class="font-sans text-sm font-light text-gray-500 leading-relaxed mb-6">
+              {col.descripcion}
+            </p>
+            <a
+              href={`#modelos`}
+              class="inline-flex items-center gap-2 font-sans text-xs tracking-widest uppercase text-gold-500 hover:text-gold-700 transition-colors duration-300"
+            >
+              Ver modelos
+              <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Header
+  gsap.from('.col-tag', {
+    scrollTrigger: { trigger: '#colecciones', start: 'top 80%' },
+    opacity: 0, y: 20, duration: 0.7,
+  });
+  gsap.from('.col-title', {
+    scrollTrigger: { trigger: '#colecciones', start: 'top 80%' },
+    opacity: 0, y: 30, duration: 0.9, delay: 0.15,
+  });
+  gsap.from('.col-desc', {
+    scrollTrigger: { trigger: '#colecciones', start: 'top 80%' },
+    opacity: 0, y: 20, duration: 0.8, delay: 0.3,
+  });
+
+  // Cards con stagger
+  gsap.from('.col-card', {
+    scrollTrigger: { trigger: '.col-card', start: 'top 85%' },
+    opacity: 0, y: 50, duration: 0.9, stagger: 0.15, ease: 'power3.out',
+  });
+</script>

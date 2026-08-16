@@ -1,0 +1,156 @@
+---
+const modelos = [
+  {
+    id:           '01',
+    nombre:       'Eternal Rose',
+    coleccion:    'Romántica',
+    descripcion:  'Flores de acuarela, tipografía script dorada y acabado en papel texturizado.',
+    incluye:      ['Invitación principal', 'Sobre kraft', 'Save the date', 'Menú'],
+    precio:       'Desde $X',
+    destacado:    true,
+  },
+  {
+    id:           '02',
+    nombre:       'Golden Vow',
+    coleccion:    'Clásica',
+    descripcion:  'Bordes dorados, papel ivory de lujo y tipografía serif con detalles en relieve.',
+    incluye:      ['Invitación', 'Sobre forrado', 'RSVP', 'Programa'],
+    precio:       'Desde $X',
+    destacado:    false,
+  },
+  {
+    id:           '03',
+    nombre:       'Magnolia',
+    coleccion:    'Botánica',
+    descripcion:  'Ilustraciones botánicas a mano, papel reciclado y paleta verde esmeralda.',
+    incluye:      ['Invitación', 'Mapa', 'Etiquetas', 'Señalética'],
+    precio:       'Desde $X',
+    destacado:    false,
+  },
+  {
+    id:           '04',
+    nombre:       'Noir & Or',
+    coleccion:    'Moderna',
+    descripcion:  'Negro mate, tipografía sans-serif y detalles dorados geométricos. Puro lujo.',
+    incluye:      ['Invitación', 'Sobre negro', 'Save the date', 'Menú'],
+    precio:       'Desde $X',
+    destacado:    false,
+  },
+  {
+    id:           '05',
+    nombre:       'Blush Peony',
+    coleccion:    'Romántica',
+    descripcion:  'Peonías rosadas, tipografía delicada y fondo pergamino. Feminino y soñador.',
+    incluye:      ['Invitación', 'Sobre blush', 'RSVP', 'Etiquetas'],
+    precio:       'Desde $X',
+    destacado:    false,
+  },
+  {
+    id:           '06',
+    nombre:       'Ivory Classic',
+    coleccion:    'Clásica',
+    descripcion:  'Elegancia pura en marfil, sin excesos. El diseño que nunca pasa de moda.',
+    incluye:      ['Invitación', 'Sobre', 'Save the date', 'Programa'],
+    precio:       'Desde $X',
+    destacado:    false,
+  },
+];
+---
+
+<section id="modelos" class="py-24 bg-cream-50">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <p class="mod-tag font-sans text-xs tracking-[0.4em] uppercase text-gold-500 mb-3">Portafolio</p>
+      <h2 class="mod-title section-title mb-4">Modelos Disponibles</h2>
+      <div class="divider-gold max-w-xs mx-auto">
+        <span class="font-script text-gold-400 text-xl">&#10022;</span>
+      </div>
+    </div>
+
+    <!-- Grid de modelos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {modelos.map((modelo, i) => (
+        <article
+          class={`mod-card bg-white border ${modelo.destacado ? 'border-gold-400 shadow-lg' : 'border-cream-200'} hover:border-gold-300 hover:shadow-xl transition-all duration-500 group relative overflow-hidden`}
+          data-index={i}
+        >
+          {modelo.destacado && (
+            <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-gold-300 via-gold-500 to-gold-300"></div>
+          )}
+
+          <!-- Placeholder imagen -->
+          <div class="relative h-56 bg-gradient-to-br from-cream-200 to-cream-300 overflow-hidden flex items-center justify-center">
+            <div class="text-center">
+              <p class="font-script text-4xl text-gold-400 opacity-60">{modelo.nombre}</p>
+              <p class="font-sans text-xs tracking-widest uppercase text-gold-300 mt-1">{modelo.coleccion}</p>
+            </div>
+            <!-- Overlay al hover -->
+            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <button class="font-sans text-xs tracking-widest uppercase text-white border border-white px-5 py-2 hover:bg-white hover:text-gray-800 transition-colors duration-300">
+                Ver detalle
+              </button>
+            </div>
+          </div>
+
+          <!-- Info -->
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <span class="font-sans text-xs tracking-widest uppercase text-gold-400">{modelo.coleccion}</span>
+                <h3 class="font-serif text-xl text-gray-800 group-hover:text-gold-700 transition-colors duration-300 mt-0.5">
+                  {modelo.nombre}
+                </h3>
+              </div>
+              <span class="font-serif text-xs text-gray-400 italic">#{modelo.id}</span>
+            </div>
+
+            <p class="font-sans text-sm font-light text-gray-500 leading-relaxed mb-4">
+              {modelo.descripcion}
+            </p>
+
+            <!-- Incluye -->
+            <ul class="flex flex-wrap gap-2 mb-5">
+              {modelo.incluye.map(item => (
+                <li class="font-sans text-xs text-gray-500 bg-cream-100 px-2 py-0.5 rounded-full">
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <div class="flex items-center justify-between pt-4 border-t border-cream-200">
+              <span class="font-serif text-base text-gold-600">{modelo.precio}</span>
+              <a href="#contacto" class="font-sans text-xs tracking-widest uppercase text-gold-500 hover:text-gold-700 transition-colors inline-flex items-center gap-1">
+                Cotizar
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from('.mod-tag', {
+    scrollTrigger: { trigger: '#modelos', start: 'top 80%' },
+    opacity: 0, y: 20, duration: 0.7,
+  });
+  gsap.from('.mod-title', {
+    scrollTrigger: { trigger: '#modelos', start: 'top 80%' },
+    opacity: 0, y: 30, duration: 0.9, delay: 0.15,
+  });
+
+  gsap.from('.mod-card', {
+    scrollTrigger: { trigger: '.mod-card', start: 'top 90%' },
+    opacity: 0, y: 60, duration: 0.9, stagger: 0.1, ease: 'power3.out',
+  });
+</script>

@@ -1,0 +1,61 @@
+/* Las fuentes ahora se cargan en el <head> (Layout.astro) — es más rápido y evita parpadeo. */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Animación de entrada por CSS (sin depender de JavaScript → sin parpadeo) ── */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(26px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+.reveal-up { animation: reveal-up 0.7s cubic-bezier(0.16, 0.84, 0.44, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up { animation: none; }
+}
+
+/* ── Paleta central (azul marino + dorado). Cambia aquí y se actualiza todo ── */
+:root {
+  --cream:      #F6F5F1;   /* fondo de página (marfil cálido) */
+  --cream-card: #FFFFFF;
+
+  --navy-50:    #EEF0F5;
+  --navy-100:   #DDE2EC;
+  --navy-200:   #C3CCDD;
+  --navy-300:   #95A3BE;
+  --navy-400:   #5E6E91;
+  --navy-500:   #3C4E74;   /* marino medio (acento) */
+  --navy-600:   #2A3A5C;
+  --navy-700:   #1F2A48;   /* marino profundo (botones / precios / navbar) */
+  --navy-900:   #121829;
+
+  --gold:       #C4963E;   /* detalle dorado champán */
+  --ink:        #1B2333;   /* texto principal */
+  --ink-soft:   #5A6377;
+  --ink-muted:  #9AA0AE;
+  --line:       #E4E7EF;
+  --wa:         #25D366;   /* WhatsApp */
+}
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  /* Forzar modo claro: evita que el "modo oscuro" del navegador del
+     celular cambie los colores de nuestro diseño. */
+  html {
+    scroll-behavior: smooth;
+    color-scheme: only light;
+    background: var(--cream);
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  a { text-decoration: none; }
+}

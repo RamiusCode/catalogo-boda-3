@@ -1,0 +1,73 @@
+---
+import Card from './Card.astro';
+
+export interface Modelo {
+  nombre?:      string;
+  tag:          string;
+  precio:       string;
+  precioOld?:   string;
+  imagen:       string;
+  linkEjemplo:  string;
+  linkDetalles: string;
+  badge?:       string;
+  badgeType?:   'default' | 'dark' | 'gold';
+  fit?:         'cover' | 'contain';
+}
+
+interface Props {
+  modelos:   Modelo[];
+  waNumero?: string;
+}
+
+const { modelos, waNumero = 'TU-NUMERO' } = Astro.props;
+---
+
+<section id="catalogo" class="pt-24 pb-16 px-5">
+  <div class="max-w-[1200px] mx-auto">
+
+    <!-- Header centrado -->
+    <div id="grid-hd" class="mb-10 text-center reveal-up">
+
+      <h2 style="font-family:'Raleway',sans-serif; font-size:clamp(1.7rem,4vw,2.5rem);
+                 line-height:1.15; margin-bottom:10px; letter-spacing:-0.01em">
+        <span style="font-weight:300; color:#5A6377">Catálogo para </span><span style="font-family:'Playfair Display',serif; font-style:italic; font-weight:600; color:#1F2A48">bodas</span>
+      </h2>
+
+      <!-- Ornamento dorado -->
+      <div class="flex items-center justify-center gap-2.5 mb-2.5">
+        <span style="display:block; width:34px; height:1px; background:linear-gradient(90deg,transparent,#C4963E)"></span>
+        <span style="color:#C4963E; font-size:11px; line-height:1">&#10022;</span>
+        <span style="display:block; width:34px; height:1px; background:linear-gradient(90deg,#C4963E,transparent)"></span>
+      </div>
+
+      <p style="font-family:'Raleway',sans-serif; font-size:12.5px; font-weight:400;
+                color:#9AA0AE; letter-spacing:0.06em; margin:0 auto">
+        diseños únicos · personalizados · elegantes
+      </p>
+
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
+      {modelos.map((m, i) => (
+        <div class="card-item reveal-up" data-i={i} style={`animation-delay:${120 + Math.min(i, 8) * 75}ms`}>
+          <Card
+            nombre={m.nombre}
+            tag={m.tag}
+            precio={m.precio}
+            precioOld={m.precioOld}
+            imagen={m.imagen}
+            linkEjemplo={m.linkEjemplo}
+            linkDetalles={m.linkDetalles}
+            waNumero={waNumero}
+            waModelo={m.tag}
+            badge={m.badge}
+            badgeType={m.badgeType}
+            fit={m.fit}
+          />
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

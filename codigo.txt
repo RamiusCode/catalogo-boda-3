@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shop Invitaciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,1,400;9..144,1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* Paleta morado elegante */
+    --bg: #FAF7FB;
+    --bg-soft: #F3EDF7;
+    --card: #FFFFFF;
+
+    --purple-deep: #3D2B5C;
+    --purple: #6B4E8C;
+    --purple-mid: #9479B3;
+    --purple-soft: #C9B5DD;
+    --purple-pale: #EDE3F5;
+    --purple-mist: #F7F1FA;
+
+    --gold: #B8975A;
+    --gold-soft: #D4B987;
+
+    --text: #2A1F3D;
+    --text-soft: #6B5C7E;
+    --border: #E8DCF0;
+
+    --wa: #25D366;
+    --wa-dark: #1FAE54;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { text-decoration: none; }
+
+  /* ─── NAV ─── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(250, 247, 251, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--purple-deep);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 500;
+    font-style: italic;
+  }
+  .logo-text {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .logo-text em { font-style: italic; color: var(--purple); font-weight: 400; }
+
+  .nav-wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--purple-deep);
+    color: white;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 99px;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .nav-wa:hover { background: var(--purple); transform: scale(0.97); }
+  .nav-wa svg { width: 14px; height: 14px; }
+
+  /* ─── HERO ─── */
+  .hero {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 56px 24px 28px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--purple);
+  }
+  .hero-meta {
+    text-align: right;
+  }
+  .hero-meta p {
+    font-size: 14px;
+    color: var(--text-soft);
+    max-width: 280px;
+  }
+  .hero-count {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--purple-deep);
+    margin-bottom: 4px;
+  }
+
+  /* ─── GRID ─── */
+  .grid {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 16px 24px 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  /* ─── CARD ─── */
+  .card {
+    background: var(--card);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px -20px rgba(61, 43, 92, 0.25);
+  }
+
+  /* IMAGE */
+  .card-image {
+    aspect-ratio: 4/5;
+    position: relative;
+    overflow: hidden;
+    background: var(--purple-pale);
+  }
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card:hover .card-image img {
+    transform: scale(1.05);
+  }
+
+  /* Badges */
+  .badge-top {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    color: var(--purple-deep);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 99px;
+  }
+  .badge-dark {
+    background: var(--purple-deep);
+    color: white;
+  }
+  .badge-gold {
+    background: var(--gold);
+    color: white;
+  }
+
+  /* Quick view */
+  .quick-view {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--purple-deep);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .card:hover .quick-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .quick-view:hover { background: white; transform: scale(1.05); }
+  .quick-view svg { width: 18px; height: 18px; }
+
+  /* Hover gradient */
+  .image-hover {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(61,43,92,0.4) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+  }
+  .card:hover .image-hover { opacity: 1; }
+
+  /* INFO */
+  .info {
+    padding: 18px 8px 6px;
+  }
+  .info-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .info-name {
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .info-tag {
+    font-size: 11px;
+    color: var(--text-soft);
+    margin-top: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .info-price-wrap {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .price-label {
+    font-size: 10px;
+    color: var(--text-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .price {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--purple-deep);
+    line-height: 1;
+  }
+  .price-old {
+    font-size: 13px;
+    color: var(--text-soft);
+    text-decoration: line-through;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+
+  /* Buttons */
+  .actions {
+    display: flex;
+    gap: 6px;
+  }
+  .btn {
+    padding: 11px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 99px;
+    text-align: center;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex: 1;
+  }
+  .btn-dark {
+    background: var(--purple-deep);
+    color: white;
+  }
+  .btn-dark:hover { background: var(--purple); }
+  .btn-light {
+    background: transparent;
+    color: var(--purple-deep);
+    border: 1px solid var(--border);
+  }
+  .btn-light:hover { background: var(--purple-mist); border-color: var(--purple-soft); }
+  .btn-wa-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    background: var(--wa);
+    color: white;
+    border-radius: 50%;
+    padding: 0;
+  }
+  .btn-wa-icon:hover { background: var(--wa-dark); transform: scale(1.05); }
+  .btn-wa-icon svg { width: 18px; height: 18px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 24px;
+    text-align: center;
+    background: var(--card);
+  }
+  footer .logo {
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  footer p {
+    font-size: 12px;
+    color: var(--text-soft);
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 12px 14px 50px;
+    }
+    .hero { padding: 36px 18px 16px; }
+    .hero h1 { font-size: 2.2rem; }
+    .info-name { font-size: 16px; }
+    .price { font-size: 17px; }
+    .price-label { font-size: 9px; }
+    .price-old { font-size: 11px; }
+    .btn { padding: 9px 8px; font-size: 11px; }
+    .btn-wa-icon { width: 38px; height: 38px; flex-basis: 38px; }
+    .info { padding: 14px 4px 4px; }
+    .badge { font-size: 9px; padding: 4px 9px; }
+    .info-top { margin-bottom: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="logo">
+    <div class="logo-icon">S</div>
+    <div class="logo-text">shop <em>invitaciones</em></div>
+  </a>
+  <a href="https://wa.me/TU-NUMERO" class="nav-wa" target="_blank">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2C6.5 2 2 6.5 2 12c0 1.7.5 3.4 1.3 4.8L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2"/></svg>
+    Contactar
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Invitaciones<br><em>para tu boda</em></h1>
+  <div class="hero-meta">
+    <div class="hero-count">04 modelos</div>
+    <p>Elige tu favorito y lo personalizamos con tus datos.</p>
+  </div>
+</section>
+
+<!-- GRID -->
+<main class="grid">
+
+  <!-- MODELO 1 -->
+  <article class="card">
+    <div class="card-image">
+      <div class="badge-top">
+        <span class="badge badge-dark">Más vendido</span>
+      </div>
+      <img src="TU-IMAGEN-01.jpg" alt="TU NOMBRE 01"/>
+      <div class="image-hover"></div>
+      <a href="TU-LINK-EJEMPLO-01" target="_blank" class="quick-view" title="Ver ejemplo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </a>
+    </div>
+    <div class="info">
+      <div class="info-top">
+        <div>
+          <h3 class="info-name">TU NOMBRE 01</h3>
+          <div class="info-tag">Modelo 01</div>
+        </div>
+        <div class="info-price-wrap">
+          <div class="price-label">Desde</div>
+          <div class="price">$150</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a href="TU-LINK-EJEMPLO-01" class="btn btn-dark" target="_blank">Ver ejemplo</a>
+        <a href="TU-LINK-DETALLES-01" class="btn btn-light" target="_blank">Detalles</a>
+        <a href="https://wa.me/TU-NUMERO?text=Hola,%20me%20interesa%20el%20Modelo%2001" class="btn btn-wa-icon" target="_blank" aria-label="Pedir por WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2C6.5 2 2 6.5 2 12c0 1.7.5 3.4 1.3 4.8L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2"/></svg>
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- MODELO 2 -->
+  <article class="card">
+    <div class="card-image">
+      <div class="badge-top">
+        <span class="badge badge-gold">Premium</span>
+      </div>
+      <img src="TU-IMAGEN-02.jpg" alt="TU NOMBRE 02"/>
+      <div class="image-hover"></div>
+      <a href="TU-LINK-EJEMPLO-02" target="_blank" class="quick-view" title="Ver ejemplo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </a>
+    </div>
+    <div class="info">
+      <div class="info-top">
+        <div>
+          <h3 class="info-name">TU NOMBRE 02</h3>
+          <div class="info-tag">Modelo 02</div>
+        </div>
+        <div class="info-price-wrap">
+          <div class="price-label">Desde</div>
+          <div class="price">$200</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a href="TU-LINK-EJEMPLO-02" class="btn btn-dark" target="_blank">Ver ejemplo</a>
+        <a href="TU-LINK-DETALLES-02" class="btn btn-light" target="_blank">Detalles</a>
+        <a href="https://wa.me/TU-NUMERO?text=Hola,%20me%20interesa%20el%20Modelo%2002" class="btn btn-wa-icon" target="_blank" aria-label="Pedir por WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2C6.5 2 2 6.5 2 12c0 1.7.5 3.4 1.3 4.8L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2"/></svg>
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- MODELO 3 -->
+  <article class="card">
+    <div class="card-image">
+      <div class="badge-top">
+        <span class="badge">Nuevo</span>
+      </div>
+      <img src="TU-IMAGEN-03.jpg" alt="TU NOMBRE 03"/>
+      <div class="image-hover"></div>
+      <a href="TU-LINK-EJEMPLO-03" target="_blank" class="quick-view" title="Ver ejemplo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </a>
+    </div>
+    <div class="info">
+      <div class="info-top">
+        <div>
+          <h3 class="info-name">TU NOMBRE 03</h3>
+          <div class="info-tag">Modelo 03</div>
+        </div>
+        <div class="info-price-wrap">
+          <div class="price-label">Desde</div>
+          <div class="price">$120</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a href="TU-LINK-EJEMPLO-03" class="btn btn-dark" target="_blank">Ver ejemplo</a>
+        <a href="TU-LINK-DETALLES-03" class="btn btn-light" target="_blank">Detalles</a>
+        <a href="https://wa.me/TU-NUMERO?text=Hola,%20me%20interesa%20el%20Modelo%2003" class="btn btn-wa-icon" target="_blank" aria-label="Pedir por WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2C6.5 2 2 6.5 2 12c0 1.7.5 3.4 1.3 4.8L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2"/></svg>
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- MODELO 4 -->
+  <article class="card">
+    <div class="card-image">
+      <img src="TU-IMAGEN-04.jpg" alt="TU NOMBRE 04"/>
+      <div class="image-hover"></div>
+      <a href="TU-LINK-EJEMPLO-04" target="_blank" class="quick-view" title="Ver ejemplo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </a>
+    </div>
+    <div class="info">
+      <div class="info-top">
+        <div>
+          <h3 class="info-name">TU NOMBRE 04</h3>
+          <div class="info-tag">Modelo 04</div>
+        </div>
+        <div class="info-price-wrap">
+          <div class="price-label">Desde</div>
+          <div class="price">$180</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a href="TU-LINK-EJEMPLO-04" class="btn btn-dark" target="_blank">Ver ejemplo</a>
+        <a href="TU-LINK-DETALLES-04" class="btn btn-light" target="_blank">Detalles</a>
+        <a href="https://wa.me/TU-NUMERO?text=Hola,%20me%20interesa%20el%20Modelo%2004" class="btn btn-wa-icon" target="_blank" aria-label="Pedir por WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2C6.5 2 2 6.5 2 12c0 1.7.5 3.4 1.3 4.8L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2"/></svg>
+        </a>
+      </div>
+    </div>
+  </article>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">
+    <div class="logo-icon">S</div>
+    <div class="logo-text">shop <em>invitaciones</em></div>
+  </div>
+  <p>Invitaciones digitales para tu boda</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+---
+import Layout        from '../layouts/Layout.astro';
+import Navbar        from '../components/Navbar.astro';
+import QuienesSomos  from '../components/QuienesSomos.astro';
+import CardGrid      from '../components/CardGrid.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import Footer        from '../components/Footer.astro';
+import '../styles/global.css';
+
+// ── Cambia estos datos por los tuyos ─────────────────────────────────────────
+const WA_NUMERO = '59178762918';   // Bolivia +591 78762918 (sin + ni espacios)
+
+// Cada modelo muestra solo su tag (ej. "Modelo 01"). Para ponerle un nombre,
+// agrega:  nombre: 'Floral Rosa',  en el modelo que quieras.
+const modelos = [
+  { tag: 'Modelo 01', precio: '180', imagen: '/images/modelo1.png', linkEjemplo: 'https://boda-modelo.vercel.app/',  linkDetalles: 'TU-LINK-DETALLES-01' },
+  { tag: 'Modelo 02', precio: '180', imagen: '/images/modelo2.png', linkEjemplo: 'https://modelo4-boda.vercel.app/', linkDetalles: 'TU-LINK-DETALLES-02' },
+  { tag: 'Modelo 03', precio: '180', imagen: '/images/modelo3.png', linkEjemplo: 'https://boda-modelo2.vercel.app/', linkDetalles: 'TU-LINK-DETALLES-03' },
+  { tag: 'Modelo 04', precio: '180', imagen: '/images/modelo41.png', linkEjemplo: 'https://modelo7-boda.vercel.app/',  linkDetalles: 'TU-LINK-DETALLES-04' },
+  { tag: 'Modelo 05', precio: '180', imagen: '/images/modelo5.png', linkEjemplo: 'https://modelo6-boda.vercel.app/',  linkDetalles: 'TU-LINK-DETALLES-05' },
+  { tag: 'Modelo 06', precio: '180', imagen: '/images/modelo6.png', linkEjemplo: 'https://modelo11-boda.vercel.app/',  linkDetalles: 'TU-LINK-DETALLES-06' },
+];
+// ─────────────────────────────────────────────────────────────────────────────
+---
+
+<Layout title="Shop Invitaciones — Diseños para tu Boda">
+  <Navbar waNumero={WA_NUMERO} />
+  <main>
+    <CardGrid modelos={modelos} waNumero={WA_NUMERO} />
+    <QuienesSomos />
+  </main>
+  <Footer />
+  <WhatsAppFloat waNumero={WA_NUMERO} />
+</Layout>

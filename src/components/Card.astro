@@ -1,0 +1,477 @@
+---
+export interface Props {
+  nombre?:      string;
+  tag:          string;
+  precio:       string;
+  precioOld?:   string;
+  imagen:       string;
+  linkEjemplo:  string;
+  linkDetalles: string;
+  waNumero:     string;
+  waModelo:     string;
+  badge?:       string;
+  badgeType?:   'default' | 'dark' | 'gold';
+  fit?:         'cover' | 'contain';
+}
+
+const {
+  nombre, tag, precio, precioOld,
+  imagen, linkEjemplo, linkDetalles,
+  waNumero, waModelo,
+  badge, badgeType = 'default',
+  fit = 'cover',
+} = Astro.props;
+
+// 'cover' = llena el marco y recorta · 'contain' = muestra la imagen completa
+const imgObjectPos = fit === 'cover' ? 'top' : 'center';
+const imgBg = fit === 'contain'
+  ? '#ffffff'
+  : 'linear-gradient(145deg,#E8ECF3 0%,#DDE2EC 55%,#AEB8CC 100%)';
+
+const badgeClass = {
+  default: 'bg-white/90 text-brand-700',
+  dark:    'bg-brand-900 text-white',
+  gold:    'bg-gold text-white',
+}[badgeType];
+
+const modalId  = `modal-${tag.toLowerCase().replace(/\s+/g, '-')}`;
+const demoId   = `demo-${tag.toLowerCase().replace(/\s+/g, '-')}`;
+// Título a mostrar: usa el nombre si existe; si no, cae al tag (ej. "Modelo 01")
+const titulo   = nombre || tag;
+const waMsg    = encodeURIComponent(`Hola! 👋 Me interesa el ${waModelo}. ¿Me das más información para reservar?`);
+
+// ── Funciones de la invitación digital (edita esta lista para todos los modelos) ──
+const funciones = [
+  { t: 'Ubicación (Google Maps)',   p: ['M15 10.5a3 3 0 11-6 0 3 3 0 016 0z', 'M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z'] },
+  { t: 'Confirmación de asistencia', p: ['M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z'] },
+  { t: 'Galería de fotos',          p: ['M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 19.5h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z'] },
+  { t: 'Itinerario del evento',     p: ['M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5'] },
+  { t: 'Código de vestimenta',      p: ['M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42'] },
+  { t: 'Mesa de regalos (QR)',      p: ['M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z', 'M6.75 6.75h.008v.008H6.75V6.75zM6.75 16.5h.008v.008H6.75V16.5zM16.5 6.75h.008v.008H16.5V6.75zM13.5 13.5h.008v.008h-.008V13.5zM13.5 19.5h.008v.008h-.008V19.5zM19.5 13.5h.008v.008h-.008V13.5zM19.5 19.5h.008v.008h-.008V19.5zM16.5 16.5h.008v.008h-.008V16.5z'] },
+  { t: 'Número de pases',           p: ['M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z'] },
+  { t: 'Nombre de invitados',       p: ['M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z'] },
+];
+---
+
+<!-- ── Card ── -->
+<article class="group relative bg-white rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1"
+         style="border:1px solid #E4E7EF; box-shadow:0 2px 12px rgba(31,42,72,0.08), 0 1px 3px rgba(27,35,51,0.04)">
+
+  <!-- Línea dorada superior (aparece al pasar el mouse) -->
+  <div class="absolute top-0 inset-x-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+       style="height:3px; background:linear-gradient(90deg,transparent,#C4963E,transparent)"></div>
+
+  <!-- Imagen de la portada (o placeholder si el modelo aún no tiene imagen) -->
+  <div class="relative overflow-hidden" style={`aspect-ratio:4/5; background:${imgBg}`}>
+
+    {imagen ? (
+      <img src={imagen} alt={`Previsualización — ${titulo}`} loading="lazy"
+           class="absolute inset-0 w-full h-full transition-transform duration-500 group-hover:scale-[1.04]"
+           style={`object-fit:${fit}; object-position:${imgObjectPos}`} />
+    ) : (
+      <>
+        <div class="absolute inset-0 opacity-[0.15]"
+             style="background-image:radial-gradient(circle, #1F2A48 1px, transparent 1px); background-size:18px 18px"></div>
+
+        <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 select-none">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style="color:#3C4E74; opacity:0.45">
+            <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 16M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span style="font-family:'Raleway',sans-serif; font-size:9.5px; font-weight:500;
+                       color:#3C4E74; opacity:0.5; letter-spacing:0.12em; text-transform:uppercase">
+            imagen próximamente
+          </span>
+        </div>
+      </>
+    )}
+
+    {badge && (
+      <span class={`absolute top-3 left-3 z-10 text-[9.5px] font-semibold tracking-[0.12em] uppercase px-2.5 py-1 rounded-full ${badgeClass}`}>
+        {badge}
+      </span>
+    )}
+
+  </div>
+
+  <!-- Contenido -->
+  <div class="flex flex-col flex-1 px-4 pt-3.5 pb-4 gap-3">
+
+    <!-- Tag + nombre + precio -->
+    <div class="flex flex-col gap-1">
+
+      <!-- Nombre izq · Precio der -->
+      <div class="flex items-center justify-between gap-2">
+        <div style="flex:1">
+          {nombre ? (
+            <>
+              <p style="font-family:'Raleway',sans-serif; font-size:9.5px; font-weight:700;
+                        letter-spacing:0.14em; text-transform:uppercase; color:#C4963E; white-space:nowrap; margin-bottom:3px">
+                {tag}
+              </p>
+              <h3 style="font-family:'Outfit',sans-serif; font-size:13.5px; font-weight:600;
+                         color:#1F2A48; line-height:1.25; letter-spacing:-0.01em">
+                {nombre}
+              </h3>
+            </>
+          ) : (
+            /* Sin nombre: el tag pasa a ser el título principal (en una sola línea) */
+            <h3 style="font-family:'Outfit',sans-serif; font-size:14.5px; font-weight:700;
+                       color:#1F2A48; line-height:1.2; letter-spacing:0.01em; white-space:nowrap">
+              {tag}
+            </h3>
+          )}
+        </div>
+
+        <div class="text-right shrink-0">
+          {precioOld && (
+            <p style="font-family:'Outfit',sans-serif; font-size:10px; font-weight:400;
+                      color:#AEB8CC; text-decoration:line-through; line-height:1">{precioOld}</p>
+          )}
+          <div class="flex items-baseline gap-1 justify-end">
+            <span style="font-family:'Outfit',sans-serif; font-size:11px; font-weight:700; color:#C4963E; letter-spacing:0.02em">Bs.</span>
+            <span style="font-family:'Outfit',sans-serif; font-size:17px; font-weight:800;
+                         color:#1F2A48; line-height:1; letter-spacing:-0.02em; white-space:nowrap">{precio}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Botones — apilados, cada uno a todo el ancho -->
+    <div class="flex flex-col gap-2 mt-auto">
+
+      <!-- Detalles → abre modal -->
+      <button
+        data-modal={modalId}
+        class="w-full flex items-center justify-center gap-2 rounded-xl py-2.5 transition-all duration-200 active:scale-[0.98] cursor-pointer whitespace-nowrap"
+        style="font-family:'Raleway',sans-serif; font-size:12.5px; font-weight:600; letter-spacing:0.03em;
+               background:#EEF0F5; color:#1F2A48; border:1.5px solid #DDE2EC">
+        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+        Detalles
+      </button>
+
+      <!-- Ver demo → abre modal con la invitación embebida -->
+      <button type="button" data-demo={demoId}
+         class="w-full flex items-center justify-center gap-2 rounded-xl py-2.5 transition-all duration-200 active:scale-[0.98] cursor-pointer whitespace-nowrap"
+         style="font-family:'Raleway',sans-serif; font-size:12.5px; font-weight:600; letter-spacing:0.03em;
+                background:#1F2A48; color:#ffffff">
+        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+        </svg>
+        Ver demo
+      </button>
+
+      <!-- WhatsApp → CTA principal -->
+      <a href={`https://wa.me/${waNumero}?text=${waMsg}`} target="_blank" rel="noopener"
+         class="w-full flex items-center justify-center gap-2 rounded-xl py-3 transition-all duration-200 active:scale-[0.98] whitespace-nowrap"
+         style="font-family:'Raleway',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.03em;
+                color:#ffffff; background:#25D366; box-shadow:0 4px 14px rgba(37,211,102,0.28)">
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2C6.5 2 2 6.5 2 12c0 1.7.5 3.4 1.3 4.8L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2"/>
+        </svg>
+        WhatsApp
+      </a>
+
+    </div>
+  </div>
+</article>
+
+<!-- ── Modal de detalles ── -->
+<div id={modalId}
+     class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center px-4 py-6 pointer-events-none"
+     style="opacity:0; visibility:hidden; background:rgba(27,35,51,0.6); backdrop-filter:blur(6px)">
+
+  <div class="modal-card w-full max-w-[420px] bg-white rounded-2xl overflow-hidden"
+       style="transform:scale(0.92); box-shadow:0 24px 64px rgba(31,42,72,0.2); max-height:92vh; overflow-y:auto">
+
+    <!-- Imagen de la portada (o placeholder si el modelo aún no tiene imagen) -->
+    <div class="relative overflow-hidden" style="aspect-ratio:16/9; background:linear-gradient(135deg,#E8ECF3,#AEB8CC)">
+      {imagen ? (
+        <img src={imagen} alt={`Vista previa — ${titulo}`} loading="lazy"
+             class="absolute inset-0 w-full h-full" style="object-fit:cover; object-position:top" />
+      ) : (
+        <>
+          <div class="absolute inset-0 opacity-[0.15]"
+               style="background-image:radial-gradient(circle, #1F2A48 1px, transparent 1px); background-size:16px 16px"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span style="font-family:'Raleway',sans-serif; font-size:10px; font-weight:500;
+                         color:#3C4E74; opacity:0.5; letter-spacing:0.15em; text-transform:uppercase">
+              vista previa próximamente
+            </span>
+          </div>
+        </>
+      )}
+
+      <!-- Botón volver -->
+      <button class="modal-close absolute top-3 right-3 inline-flex items-center gap-1.5 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+              style="background:#1F2A48; color:#ffffff; padding:6px 13px; border:1.5px solid rgba(255,255,255,0.85); box-shadow:0 4px 14px rgba(31,42,72,0.4)">
+        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+        <span style="font-family:'Raleway',sans-serif; font-size:12px; font-weight:700; letter-spacing:0.03em">Volver</span>
+      </button>
+    </div>
+
+    <!-- Info del modelo -->
+    <div class="px-5 pt-4 pb-5">
+
+      <div class="flex items-start justify-between gap-3 mb-4">
+        <div>
+          {nombre ? (
+            <>
+              <p style="font-family:'Raleway',sans-serif; font-size:9px; font-weight:600;
+                        letter-spacing:0.22em; color:#9AA0AE; text-transform:uppercase; margin-bottom:4px">
+                {tag}
+              </p>
+              <h3 style="font-family:'Raleway',sans-serif; font-size:15px; font-weight:700; color:#1B2333; line-height:1.2">
+                {nombre}
+              </h3>
+            </>
+          ) : (
+            <h3 style="font-family:'Raleway',sans-serif; font-size:16px; font-weight:700; color:#1B2333; line-height:1.2">
+              {tag}
+            </h3>
+          )}
+        </div>
+        <div class="text-right shrink-0">
+          {precioOld && (
+            <p style="font-family:'Raleway',sans-serif; font-size:11px; color:#9AA0AE; text-decoration:line-through">{precioOld}</p>
+          )}
+          <p style="font-family:'Raleway',sans-serif; font-size:22px; font-weight:800; color:#1F2A48; line-height:1">
+            {precio}
+          </p>
+        </div>
+      </div>
+
+      <!-- Encabezado funciones -->
+      <div class="flex items-center gap-2.5 mb-3.5">
+        <span style="display:block; width:16px; height:1px; background:#C4963E"></span>
+        <span style="font-family:'Raleway',sans-serif; font-size:10px; font-weight:700;
+                     letter-spacing:0.14em; color:#1F2A48; text-transform:uppercase; white-space:nowrap">
+          Funciones incluidas
+        </span>
+        <span style="display:block; flex:1; height:1px; background:linear-gradient(90deg,#C4963E,transparent)"></span>
+      </div>
+
+      <!-- Lista de funciones (1 columna en celular, 2 en pantalla grande) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 mb-5">
+        {funciones.map(f => (
+          <div class="flex items-center gap-2.5 rounded-lg" style="padding:2px 0">
+            <span class="shrink-0 flex items-center justify-center"
+                  style="width:30px; height:30px; border-radius:9px; background:#EEF0F5; border:1px solid #DDE2EC">
+              <svg class="w-4 h-4" style="color:#1F2A48" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
+                {f.p.map(d => <path stroke-linecap="round" stroke-linejoin="round" d={d}/>)}
+              </svg>
+            </span>
+            <span style="font-family:'Raleway',sans-serif; font-size:12.5px; font-weight:500;
+                         color:#3D4654; line-height:1.3">{f.t}</span>
+          </div>
+        ))}
+      </div>
+
+      <!-- Botones del modal -->
+      <div class="flex flex-col gap-2">
+        <button type="button" data-demo={demoId}
+           class="flex items-center justify-center gap-2 rounded-xl py-3 transition-all duration-200 cursor-pointer"
+           style="font-family:'Raleway',sans-serif; font-size:13px; font-weight:700;
+                  letter-spacing:0.03em; background:#1F2A48; color:#ffffff">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+          Ver Invitación
+        </button>
+        <a href={`https://wa.me/${waNumero}?text=${waMsg}`} target="_blank" rel="noopener"
+           class="flex items-center justify-center gap-2 rounded-xl py-3 transition-all duration-200"
+           style="font-family:'Raleway',sans-serif; font-size:13px; font-weight:700;
+                  letter-spacing:0.03em; background:#25D366; color:#ffffff">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2C6.5 2 2 6.5 2 12c0 1.7.5 3.4 1.3 4.8L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2"/>
+          </svg>
+          Solicitar por WhatsApp
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal "Ver demo" — invitación embebida en marco de celular ── -->
+<div id={demoId}
+     class="demo-overlay fixed inset-0 z-[110] flex flex-col items-center justify-center px-3 py-4 pointer-events-none"
+     style="opacity:0; visibility:hidden; background:rgba(27,35,51,0.78); backdrop-filter:blur(8px)">
+
+  <!-- Barra superior -->
+  <div class="w-full max-w-[400px] flex items-center justify-between gap-3 mb-3 px-1">
+    <span style="font-family:'Raleway',sans-serif; font-size:13px; font-weight:600; color:#ffffff; line-height:1.2">
+      {titulo} <span style="opacity:0.6; font-weight:400">· vista previa</span>
+    </span>
+    <div class="flex items-center gap-3 shrink-0">
+      <a href={linkEjemplo} target="_blank" rel="noopener"
+         class="flex items-center gap-1 transition-opacity duration-200 hover:opacity-100"
+         style="font-family:'Raleway',sans-serif; font-size:11px; font-weight:500; color:#ffffff; opacity:0.8; white-space:nowrap">
+        Pantalla completa
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+        </svg>
+      </a>
+      <button class="demo-close inline-flex items-center gap-1.5 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+              style="background:#1F2A48; color:#ffffff; padding:7px 14px; border:1.5px solid rgba(255,255,255,0.85); box-shadow:0 4px 14px rgba(31,42,72,0.4)">
+        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+        <span style="font-family:'Raleway',sans-serif; font-size:12.5px; font-weight:700; letter-spacing:0.03em">Volver</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Marco de celular: el iframe se renderiza como un teléfono real (390×844)
+       y se escala para que la invitación quepa COMPLETA dentro del marco. -->
+  <div class="demo-frame bg-white overflow-hidden"
+       style="border:7px solid #1B4332; border-radius:30px;
+              box-shadow:0 24px 70px rgba(0,0,0,0.45); transform:scale(0.95)">
+    <div class="demo-screen" style="position:relative; overflow:hidden">
+      <iframe data-src={linkEjemplo} title={`Vista previa — ${titulo}`}
+              class="demo-iframe" style="border:0; display:block; background:#ffffff; transform-origin:top left"
+              loading="lazy"
+              allow="autoplay; fullscreen; geolocation; clipboard-write; encrypted-media; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- Hint -->
+  <p class="mt-3" style="font-family:'Raleway',sans-serif; font-size:10.5px; color:rgba(255,255,255,0.6); white-space:nowrap">
+    Desliza dentro para ver toda la invitación · toca fuera para cerrar
+  </p>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+
+  // Mueve cada modal directo al <body> para que cubra TODA la pantalla
+  // (si no, el transform de la tarjeta lo encierra dentro de su tamaño).
+  document.querySelectorAll('.modal-overlay, .demo-overlay').forEach(m => document.body.appendChild(m));
+
+  document.querySelectorAll('[data-modal]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id      = (btn as HTMLElement).dataset.modal!;
+      const overlay = document.getElementById(id)!;
+      const card    = overlay.querySelector('.modal-card') as HTMLElement;
+
+      overlay.style.visibility = 'visible';
+      overlay.style.pointerEvents = 'auto';
+      document.body.style.overflow = 'hidden';
+
+      gsap.to(overlay, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+      gsap.to(card,    { scale: 1,   duration: 0.35, ease: 'back.out(1.4)' });
+    });
+  });
+
+  document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.addEventListener('click', () => closeModal(btn.closest('.modal-overlay') as HTMLElement));
+  });
+
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal(overlay as HTMLElement);
+    });
+  });
+
+  function closeModal(overlay: HTMLElement) {
+    const card = overlay.querySelector('.modal-card') as HTMLElement;
+    gsap.to(card,    { scale: 0.92, duration: 0.2, ease: 'power2.in' });
+    gsap.to(overlay, {
+      opacity: 0, duration: 0.22, ease: 'power2.in',
+      onComplete() {
+        overlay.style.pointerEvents = 'none';
+        overlay.style.visibility = 'hidden';
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+  // ── Modal "Ver demo" (invitación embebida en marco de celular) ──
+  document.querySelectorAll('[data-demo]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id      = (btn as HTMLElement).dataset.demo!;
+      const overlay = document.getElementById(id)!;
+      const frame   = overlay.querySelector('.demo-frame') as HTMLElement;
+      const iframe  = overlay.querySelector('iframe') as HTMLIFrameElement;
+
+      // Carga la invitación solo al abrir (más rápido al cargar la página)
+      if (!iframe.getAttribute('src') && iframe.dataset.src) iframe.src = iframe.dataset.src;
+
+      overlay.style.visibility = 'visible';
+      overlay.style.pointerEvents = 'auto';
+      document.body.style.overflow = 'hidden';
+      sizeDemo(overlay);
+      gsap.to(overlay, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+      gsap.fromTo(frame, { scale: 0.95 }, { scale: 1, duration: 0.38, ease: 'back.out(1.4)' });
+    });
+  });
+
+  // Calcula el tamaño del marco: el iframe se renderiza como un teléfono real
+  // (390×844) y se escala para caber completo en la pantalla disponible.
+  function sizeDemo(overlay: HTMLElement) {
+    const screen = overlay.querySelector('.demo-screen') as HTMLElement;
+    const iframe = overlay.querySelector('.demo-iframe') as HTMLIFrameElement;
+    if (!screen || !iframe) return;
+    const W = 412, H = 812;                 // teléfono lógico (más ancho y un poco menos alto)
+    const maxW = Math.min(window.innerWidth - 20, 420) - 14;   // -14 = bordes del marco
+    const maxH = Math.min(window.innerHeight - 155, 850) - 14;  // deja sitio a barra y texto
+    const scale = Math.min(maxW / W, maxH / H);
+    iframe.style.width  = W + 'px';
+    iframe.style.height = H + 'px';
+    iframe.style.transform = `scale(${scale})`;
+    screen.style.width  = `${Math.round(W * scale)}px`;
+    screen.style.height = `${Math.round(H * scale)}px`;
+  }
+
+  // Recalcular si cambia el tamaño/orientación con un demo abierto
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.demo-overlay').forEach(ov => {
+      const el = ov as HTMLElement;
+      if (el.style.visibility === 'visible') sizeDemo(el);
+    });
+  });
+
+  document.querySelectorAll('.demo-close').forEach(btn => {
+    btn.addEventListener('click', () => closeDemo(btn.closest('.demo-overlay') as HTMLElement));
+  });
+
+  document.querySelectorAll('.demo-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeDemo(overlay as HTMLElement);
+    });
+  });
+
+  function closeDemo(overlay: HTMLElement) {
+    const frame  = overlay.querySelector('.demo-frame') as HTMLElement;
+    const iframe = overlay.querySelector('iframe') as HTMLIFrameElement;
+    gsap.to(frame,   { scale: 0.95, duration: 0.2, ease: 'power2.in' });
+    gsap.to(overlay, {
+      opacity: 0, duration: 0.22, ease: 'power2.in',
+      onComplete() {
+        overlay.style.pointerEvents = 'none';
+        overlay.style.visibility = 'hidden';
+        document.body.style.overflow = '';
+        iframe.removeAttribute('src');   // detiene música/video y libera memoria al cerrar
+      }
+    });
+  }
+
+  // Cerrar cualquier modal abierto con la tecla Esc
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.modal-overlay, .demo-overlay').forEach(ov => {
+      const el = ov as HTMLElement;
+      if (el.style.pointerEvents === 'auto') {
+        if (el.classList.contains('demo-overlay')) closeDemo(el);
+        else closeModal(el);
+      }
+    });
+  });
+</script>

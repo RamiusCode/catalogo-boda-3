@@ -1,0 +1,114 @@
+---
+interface Props { total?: number; waNumero?: string }
+const { total = 10, waNumero = 'TU-NUMERO' } = Astro.props;
+const waMsg = encodeURIComponent('Hola! 👋 Me interesan sus invitaciones digitales para boda. ¿Me pueden dar más información?');
+---
+
+<section id="inicio" class="relative overflow-hidden" style="padding-top:96px; padding-bottom:8px">
+  <div class="max-w-[1100px] mx-auto px-5">
+
+    <!-- ── Texto principal ── -->
+    <div id="h-text" class="text-center mx-auto" style="opacity:0; transform:translateY(20px); max-width:660px">
+
+      <!-- Eyebrow dorado -->
+      <div class="inline-flex items-center gap-2.5 mb-4">
+        <span style="display:block; width:26px; height:1px; background:linear-gradient(90deg,transparent,#C4963E)"></span>
+        <span style="font-family:'Raleway',sans-serif; font-size:10.5px; font-weight:700;
+                     letter-spacing:0.22em; text-transform:uppercase; color:#C4963E">Invitaciones digitales</span>
+        <span style="display:block; width:26px; height:1px; background:linear-gradient(90deg,#C4963E,transparent)"></span>
+      </div>
+
+      <!-- Titular -->
+      <h1 style="font-family:'Raleway',sans-serif; font-weight:300; font-size:clamp(2rem,6.5vw,3.4rem);
+                 line-height:1.1; color:#1B2333; letter-spacing:-0.015em">
+        Invitaciones que tus invitados
+        <span style="font-family:'Playfair Display',serif; font-style:italic; font-weight:600; color:#1F2A48"> van a amar</span>
+      </h1>
+
+      <!-- Frase de valor -->
+      <p class="mx-auto mt-4" style="font-family:'Raleway',sans-serif; font-size:14.5px; font-weight:400;
+                                     line-height:1.65; color:#5A6377; max-width:480px">
+        Diseños elegantes y personalizados para tu boda — con mapa, confirmación de asistencia,
+        galería y más. Todo en un link que compartes por WhatsApp.
+      </p>
+
+      <!-- Botones -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-7">
+        <a href="#catalogo"
+           class="inline-flex items-center justify-center gap-2 rounded-xl transition-all duration-200 hover:scale-[1.03] active:scale-95 w-full sm:w-auto"
+           style="font-family:'Raleway',sans-serif; font-size:13.5px; font-weight:700; letter-spacing:0.03em;
+                  color:#ffffff; background:#1F2A48; padding:13px 28px; box-shadow:0 6px 20px rgba(31,42,72,0.22)">
+          Ver catálogo
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+          </svg>
+        </a>
+        <a href={`https://wa.me/${waNumero}?text=${waMsg}`} target="_blank" rel="noopener"
+           class="inline-flex items-center justify-center gap-2 rounded-xl transition-all duration-200 hover:scale-[1.03] active:scale-95 w-full sm:w-auto"
+           style="font-family:'Raleway',sans-serif; font-size:13.5px; font-weight:700; letter-spacing:0.03em;
+                  color:#ffffff; background:#25D366; padding:13px 28px; box-shadow:0 6px 20px rgba(37,211,102,0.26)">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5 0-.2 0-.4-.1-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2C6.5 2 2 6.5 2 12c0 1.7.5 3.4 1.3 4.8L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2"/>
+          </svg>
+          Escríbenos
+        </a>
+      </div>
+
+      <!-- Mini fila de confianza -->
+      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mt-7"
+           style="font-family:'Raleway',sans-serif; font-size:11.5px; font-weight:500; color:#9AA0AE">
+        <span class="inline-flex items-center gap-1.5">
+          <span style="color:#C4963E">✦</span> {total} modelos disponibles
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span style="color:#C4963E">✦</span> 100% personalizable
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span style="color:#C4963E">✦</span> Entrega rápida
+        </span>
+      </div>
+
+    </div>
+
+    <!-- ── Imagen ── -->
+    <div id="h-img" class="relative mx-auto mt-10 rounded-2xl overflow-hidden"
+         style="opacity:0; transform:translateY(20px); max-width:880px;
+                box-shadow:0 24px 60px rgba(31,42,72,0.16), 0 4px 14px rgba(27,35,51,0.06)">
+
+      <img src="/images/portada.png"
+           alt="Invitaciones web para bodas — Shop Invitaciones"
+           class="w-full block" />
+
+      <!-- Badge flotante sobre la imagen -->
+      <div id="h-badge"
+           class="absolute bottom-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-3 px-5 py-2.5 rounded-full whitespace-nowrap z-10"
+           style="opacity:0; transform:translateY(8px);
+                  background:rgba(255,255,255,0.92); border:1px solid rgba(221,226,236,0.6);
+                  backdrop-filter:blur(12px); box-shadow:0 4px 20px rgba(31,42,72,0.15)">
+        <div class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full shrink-0" style="background:#C4963E"></span>
+          <span style="font-family:'Raleway',sans-serif; font-size:11px; font-weight:700;
+                       color:#1F2A48; letter-spacing:0.05em">
+            {String(total).padStart(2,'0')} modelos
+          </span>
+        </div>
+        <div style="width:1px; height:14px; background:#E4E7EF"></div>
+        <span style="font-family:'Raleway',sans-serif; font-size:11px; font-weight:500;
+                     color:#9AA0AE; letter-spacing:0.03em">
+          disponibles
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+
+  gsap.timeline({ delay: 0.15 })
+    .to('#h-text',  { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+    .to('#h-img',   { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.45')
+    .to('#h-badge', { opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.6)' }, '-=0.2');
+</script>
