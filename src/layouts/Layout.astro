@@ -8,6 +8,11 @@ const {
   title = 'Catálogo de Bodas — Invitaciones Elegantes',
   description = 'Descubre nuestra colección de invitaciones y papelería para bodas. Diseños únicos, elegantes y personalizados para tu día especial.',
 } = Astro.props;
+
+// URL absoluta del sitio y de la portada (WhatsApp/Facebook exigen ruta completa)
+const base = Astro.site ?? Astro.url;
+const urlPagina = new URL(Astro.url.pathname, base).href;
+const urlPortada = new URL('/images/og-image.jpg', base).href;
 ---
 
 <!doctype html>
@@ -19,6 +24,25 @@ const {
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={urlPagina} />
+
+    <!-- Vista previa al compartir el link (WhatsApp, Facebook, Instagram, Telegram) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Shop Invitaciones" />
+    <meta property="og:url" content={urlPagina} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={urlPortada} />
+    <meta property="og:image:secure_url" content={urlPortada} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Catálogo de invitaciones digitales para bodas" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={urlPortada} />
 
     <!-- Fuentes (carga rápida con preconnect) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
