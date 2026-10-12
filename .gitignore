@@ -29,3 +29,6 @@ Thumbs.db
 
 # configuracion local de Claude Code
 .claude/
+
+# PNG originales de las portadas (la pagina usa las versiones .webp)
+imagenes-originales/
