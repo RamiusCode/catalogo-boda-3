@@ -393,17 +393,6 @@ const funciones = [
     });
   }
 
-  // ── Modo oscuro en la vista previa ──
-  // Algunos navegadores de celular (Xiaomi, Samsung, Opera, UC...) cambian los
-  // colores de la invitación cuando se muestra DENTRO del catálogo, aunque la
-  // invitación esté protegida. Abierta directamente sí se ve bien, así que en
-  // esos casos "Ver modelo" abre la invitación en una pestaña nueva.
-  const ua = navigator.userAgent;
-  const navegadorQueOscurece = /MiuiBrowser|XiaoMi|Mint Browser|SamsungBrowser|HeyTapBrowser|OppoBrowser|VivoBrowser|HuaweiBrowser|UCBrowser|Quark|PhxBrowser|OPR\/|OPT\/|YaBrowser/i.test(ua);
-  const appInterna = /; wv\)/.test(ua);   // navegador dentro de otra app (Facebook, Instagram...)
-  const modoOscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const abrirDirecto = /Android/i.test(ua) && (navegadorQueOscurece || (appInterna && modoOscuro));
-
   // ── Modal "Ver demo" (invitación embebida en marco de celular) ──
   document.querySelectorAll('[data-demo]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -411,11 +400,6 @@ const funciones = [
       const overlay = document.getElementById(id)!;
       const frame   = overlay.querySelector('.demo-frame') as HTMLElement;
       const iframe  = overlay.querySelector('iframe') as HTMLIFrameElement;
-
-      if (abrirDirecto && iframe.dataset.src) {
-        window.open(iframe.dataset.src, '_blank', 'noopener');
-        return;
-      }
 
       // Carga la invitación solo al abrir (más rápido al cargar la página)
       if (!iframe.getAttribute('src') && iframe.dataset.src) iframe.src = iframe.dataset.src;
